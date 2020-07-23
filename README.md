@@ -164,7 +164,7 @@ ansible-playbook -i hosts/vagrant site.yml -l Vagrant-Docker -t tools
 #### Add Ansible user and sshd setting, firewalld 
 Add ansible user From root login and sshd, firewalld
 ```bash
-ansible-playbook -i hosts/product site.yml -l Product-Docker-Init -t init
+ansible-playbook -i hosts/product site.yml -l Product-Docker-Init -t init -t firewalld
 ```
 #### Install all
 Install all without init

@@ -52,8 +52,22 @@
         - lazydocker
         - tools
 
+    - role: pyenv
+      tags:
+        - pyenv
+        - tools
+
+    - role: nvim
+      tags:
+        - nvim
+        - tools
+
+    - role: bash_it
+      tags:
+        - bash_it
+        - tools
+
     - role: firewalld
       tags:
         - firewalld
         - docker
-        - init
