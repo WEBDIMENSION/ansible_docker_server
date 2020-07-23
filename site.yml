@@ -67,6 +67,11 @@
         - bash_it
         - tools
 
+    - role: ccze
+      tags:
+        - ccze
+        - tools
+
     - role: firewalld
       tags:
         - firewalld
