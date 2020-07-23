@@ -1,0 +1,70 @@
+---
+- include: "install_{{ ansible_distribution | lower }}{{ ansible_distribution_major_version }}.yml"
+
+- name: pybyenv git clone
+  git:
+    repo: https://github.com/pyenv/pyenv.git
+    dest: "{{ pyenv_path }}"
+  when:
+    - pyenv_exists is failed
+    - pyenv_state == "present"
+
+- name: remove check pyenv
+  stat:
+    path: "{{ pyenv_path }}"
+  register: chk_dir
+  changed_when: False
+  ignore_errors: yes
+
+- name: remove pyenv
+  shell: bash -lc "rm -rf {{ pyenv_path }}"
+  when:
+    - chk_dir.stat.exists == true
+    - pyenv_state == "absent"
+
+- name: Path for bashrc
+  blockinfile:
+    dest: "{{ home_path }}/{{ shell_profile }}"
+    create: yes
+    insertafter: '^PATH=\$PATH:\$HOME/bin$'
+    marker: "# {mark} ANSIBLE pyenv"
+    state: "{{ pyenv_state }}"
+    block: |
+      export PYENV_ROOT={{ pyenv_path }}
+      export PATH="$PYENV_ROOT/bin:$PATH"
+      eval "$(pyenv init -)"
+  when: ( pyenv_exists is failed and pyenv_state == "present") or
+    ( pyenv_exists is not failed and pyenv_state == "absent")
+
+
+- name: Check installed python
+  shell: bash -lc "pyenv versions | grep {{ python_version }}"
+  register: pyenv_check_install
+  changed_when: False
+  ignore_errors: yes
+
+- name: Install python when not installed
+  shell: bash -lc "pyenv install {{ python_version }}"
+  when:
+    - pyenv_exists is failed
+    - pyenv_state == "present"
+  args:
+    creates: "{{ pyenv_path }}/versions/{{ python_version }}"
+
+- name: Check python global
+  shell: bash -lc "pyenv version | grep {{ python_version }}"
+  register: pyenv_check_default
+  changed_when: False
+  ignore_errors: yes
+
+- name: Set python global version
+  shell: bash -lc "pyenv global {{ python_version }}"
+  when:
+    - pyenv_exists is failed
+    - pyenv_state == "present"
+
+- name: pip upgrade
+  shell: bash -lc "pip install --upgrade pip"
+  when:
+    - pyenv_exists is failed
+    - pyenv_state == "present"

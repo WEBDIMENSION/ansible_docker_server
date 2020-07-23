@@ -1,0 +1,20 @@
+---
+# defaults file for pyenv
+#python
+pyenv_state: "present"
+#pyenv_state: "absent"
+pyenv_path: "{{ ansible_env.HOME }}/.pyenv"
+python_version: 3.7.6
+
+python_dependencies_centos7:
+  - gcc
+  - bzip2
+  - bzip2-devel
+  - readline
+  - readline-devel
+  - sqlite
+  - sqlite-devel
+  - openssl
+  - openssl-devel
+  - libffi-devel
+  - zlib-devel

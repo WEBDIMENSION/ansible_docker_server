@@ -1,0 +1,14 @@
+---
+# tasks file for pyenv
+# For  CentOS8
+- name: check installed pyenv
+  shell: bash -lc "pyenv --version"
+  register: pyenv_exists
+  changed_when: False
+  ignore_errors: yes
+
+- name: dependencies install
+  become: true
+  dnf:
+    name: "{{ item }}"
+  with_items: "{{ python_dependencies }}"
