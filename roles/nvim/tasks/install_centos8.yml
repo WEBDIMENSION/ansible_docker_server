@@ -1,0 +1,56 @@
+---
+# tasks file for ansible
+# For CentOS8
+- name: check installed nvim
+  shell: bash -lc "nvim --version"
+  register: nvim_exists
+  changed_when: False
+  ignore_errors: yes
+
+- name: pip-nvim install when not installed
+  become: true
+  command:  bash -lc "pip3 install neovim"
+  when: nvim_exists is failed
+
+- name: Install nvim
+  become: true
+  dnf:
+    name: "{{ item }}"
+  with_items: "{{ nvim_dependencies }}"
+
+- name: Make  nvim config dir
+  file:
+    path: ~/.config/nvim
+    state: directory
+    owner: "{{ ansible_env.USER }}"
+    group:  "{{ ansible_env.USER }}"
+    recurse: yes
+  when: nvim_exists is failed
+
+- name: Make  nvim config dir
+  file:
+    path: ~/.config/nvim/init.vim
+    state: touch
+    owner: "{{ ansible_env.USER }}"
+    group: "{{ ansible_env.USER }}"
+  when: nvim_exists is failed
+
+- name: check exist ~/.vimrc
+  stat:
+    path: "~/.vimrc"
+  register: chk_exist_vimrc
+  changed_when: False
+  ignore_errors: yes
+
+- name: Create ~/.vimrc
+  file:
+    path: '~/.vimrc'
+    state: touch
+    owner: "{{ ansible_env.USER }}"
+    group: "{{ ansible_env.USER }}"
+  when: chk_exist_vimrc.stat.exists == false
+
+- name: nvim install when not installed
+  shell: |
+    echo 'source ~/.vimrc' > ~/.config/nvim/init.vim
+  when: nvim_exists is failed

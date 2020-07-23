@@ -1,0 +1,12 @@
+---
+nvim_dependencies:
+  - perl-devel
+  - perl-ExtUtils-Embed
+  - gcc
+  - make
+  - ncurses-devel
+  - mercurial
+  - ruby-devel
+  - python-devel
+  - lua-devel
+  - neovim
