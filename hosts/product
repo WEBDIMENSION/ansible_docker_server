@@ -1,0 +1,14 @@
+[docker-server]
+Product-Docker-Init ansible_host=xxx.xxx.xxx.xxx
+Product-Docker
+
+[Product-Docker-Init]
+Product-Docker-Init
+[Product-Docker-Init:vars]
+ansible_ssh_user=root
+ansible_port=22
+ansible_ssh_pass={{ secret.root_user_password }}
+
+[product]
+Product-Docker-Init
+Product-Docker

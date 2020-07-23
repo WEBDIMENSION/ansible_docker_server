@@ -1,0 +1,65 @@
+# tasks file for roles/git
+# For CentOS7
+- name: debug
+  debug:
+    msg: "{{ ansible_distribution }}"
+
+- name: Debug get Git current version
+  shell: bash -lc "git  --version"
+  register: git_exists
+  changed_when: False
+  ignore_errors: yes
+
+- name: install development yum packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - gcc
+    - gcc-c++
+    - openssl-devel
+    - readline-devel
+    - yum-utils
+    - git
+  when:
+    - git_exists is failed
+
+
+
+#- name: Debug get Git current version
+#  shell: bash -lc "git  --version"
+#  register: git_exists
+#  changed_when: False
+#  ignore_errors: yes
+
+  #- name: Debug display Git current version
+  #  debug:
+  #    msg: "{{ git_exists }}"
+#- name: Get repository for git
+#  become: true
+#  yum:
+#    name: "{{ item }}"
+#    state: present
+#  with_items:
+#    - https://repo.ius.io/ius-release-el7.rpm
+#    - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+#  when:
+#    - git_exists is failed
+
+#- name: Install git
+#  become: true
+#  yum:
+#    name: "{{ item }}"
+#    enablerepo: ius
+#    state: present
+#  with_items:
+##    - git2u
+#    - git
+#  when:
+#    - git_exists is failed
+#
+#- name: Disable ius repository
+#  become: true
+#  shell: yum-config-manager --disable ius
+#  when:
+#    - git_exists is failed

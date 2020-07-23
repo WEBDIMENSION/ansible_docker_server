@@ -1,0 +1,8 @@
+---
+# common
+shell_profile: '.bash_profile'
+home_path: "{{ ansible_env.HOME }}"
+os_time_zone: "Asia/Tokyo"
+
+
+

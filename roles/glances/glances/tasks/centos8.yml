@@ -1,0 +1,16 @@
+---
+# tasks file for roles/glances
+# For CentOS7
+- name: check installed glances
+  shell: bash -lc "glances --version"
+  register: glances_exists
+  changed_when: False
+  ignore_errors: yes
+
+- name: Install glances
+  become: true
+  shell: bash -lc "pip3 install glances"
+  when: glances_exists is failed
+
+
+

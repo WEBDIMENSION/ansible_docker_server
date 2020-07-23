@@ -1,0 +1,6 @@
+---
+# groups
+user_groups: "{{ secret.user_groups }}"
+
+# users
+users: "{{ secret.users }}"

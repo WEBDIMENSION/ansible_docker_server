@@ -1,0 +1,59 @@
+---
+- name: Docker-Server
+  hosts: docker-server
+  roles:
+    - role: ansible-user
+      tags:
+        - ansible-user
+        - init
+
+    - role: sshd
+      tags:
+        - sshd
+        - init
+
+    - role: hostname
+      tags:
+        - hostname
+        - init
+
+    - role: common
+      tags:
+        - common
+
+    - role: zip
+      tags:
+        - zip
+
+    - role: git
+      tags:
+        - git
+
+    - role: crond
+      tags:
+        - crond
+
+    - role: docker
+      tags:
+        - docker
+
+    - role: docker-compose
+      tags:
+        - docker-compose
+        - docker
+
+    - role: glances
+      tags:
+        - glances
+        - tools
+
+    - role: lazydocker
+      tags:
+        - lazydocker
+        - tools
+
+    - role: firewalld
+      tags:
+        - firewalld
+        - docker
+        - init

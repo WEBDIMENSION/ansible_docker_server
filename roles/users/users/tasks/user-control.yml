@@ -1,0 +1,43 @@
+---
+# tasks file for roles/users
+# user-control
+- name: group control
+  become: true
+  group:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items: "{{ user_groups }}"
+
+- name: user-control
+  become: true
+  user:
+    name: "{{ item.name }}"
+    #group: "{{ item.group }}"
+    groups: "{{ item.groups }}"
+    state:  "{{ item.state }}"
+    remove:  "{{ item.remove }}"
+    create_home: "{{ item.create_home }}"
+    password: "{{ item.password }}"
+    shell: "{{ item.login_shell }}"
+    comment: "{{ item.comment }}"
+    expires: "{{ item.expires}}"
+  #changed_when: False
+  with_items: "{{ users }}"
+
+- name: Set public-key
+  become: true
+  authorized_key:
+    user: "{{ item.name }}"
+    state: "{{ item.state }}"
+    key: "{{ item.public_key }}"
+  with_items: "{{ users }}"
+
+- name: add sudo authorize
+  become: true
+  lineinfile:
+    dest: /etc/sudoers
+    backup: yes
+    line: "{{ item.name }} ALL=(ALL) NOPASSWD: ALL"
+  when: item.sudo == 'present'
+  with_items: "{{ users }}"
+  notify: Restart sshd

@@ -1,0 +1,19 @@
+---
+# tasks file for crond
+# For CeotOS7
+- name: install crond
+  become: true
+  yum:
+    name: cronie-noanacron
+    state: installed
+  notify:
+    - Restart crond
+
+- name: remove crond
+  become: true
+  yum:
+    name: cronie-anacron
+    state: absent
+  notify:
+    - Restart crond
+
