@@ -1,6 +1,6 @@
 ---
-- name: Docker-Server
-  hosts: docker-server
+- name: Docker_Server
+  hosts: docker_server
   roles:
     - role: ansible-user
       tags:

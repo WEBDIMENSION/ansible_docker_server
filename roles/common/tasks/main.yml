@@ -13,7 +13,7 @@
   shell: |
     timedatectl set-timezone "{{ os_time_zone }}"
   when:
-     - time_zone.stdout != "{{ os_time_zone }}"
+     - time_zone.stdout !=  os_time_zone
 
 - name: install epel
   become: true
